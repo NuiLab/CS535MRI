@@ -7,13 +7,13 @@ public class Manipulation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void ScaleUp()
     {
@@ -22,7 +22,8 @@ public class Manipulation : MonoBehaviour
 
     public void ScaleDown()
     {
-        transform.localScale += new Vector3(-0.25f, -0.25f, -0.25f);
+        if (transform.localScale.x > 0.25f)
+            transform.localScale += new Vector3(-0.25f, -0.25f, -0.25f);
     }
 
     public void RotateLeft()
