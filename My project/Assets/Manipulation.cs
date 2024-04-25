@@ -36,4 +36,3 @@ public class Manipulation : MonoBehaviour
         transform.Rotate(0, 15, 0);
     }
 }
-a
