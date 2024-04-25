@@ -17,6 +17,7 @@ public class Manipulation : MonoBehaviour
     }
     public void ScaleUp()
     {
+        if (transform.localScale.x < 1.75f)
         transform.localScale += new Vector3(0.25f, 0.25f, 0.25f);
     }
 
@@ -35,3 +36,4 @@ public class Manipulation : MonoBehaviour
         transform.Rotate(0, 15, 0);
     }
 }
+a
