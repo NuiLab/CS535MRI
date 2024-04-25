@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Anchor
+  - GlobalManager
+  - YPlane
+  - XPlane
+  - ZPlane
   layers:
   - Default
   - TransparentFX
