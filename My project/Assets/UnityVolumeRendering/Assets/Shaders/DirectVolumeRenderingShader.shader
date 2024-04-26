@@ -279,7 +279,7 @@
             // Direct Volume Rendering
             frag_out frag_dvr(frag_in i)
             {
-                #define MAX_NUM_STEPS 512
+                #define MAX_NUM_STEPS 256
                 #define OPACITY_THRESHOLD (1.0 - 1.0 / 255.0)
                 const int samplingRate = (int)(MAX_NUM_STEPS * _SamplingRateMultiplier);
 
@@ -380,7 +380,7 @@
             // Maximum Intensity Projection mode
             frag_out frag_mip(frag_in i)
             {
-                #define MAX_NUM_STEPS 512
+                #define MAX_NUM_STEPS 256
                 const int samplingRate = (int)(MAX_NUM_STEPS * _SamplingRateMultiplier);
 
                 RayInfo ray = getRayBack2Front(i.vertexLocal);
@@ -419,7 +419,7 @@
             // Draws the first point (closest to camera) with a density within the user-defined thresholds.
             frag_out frag_surf(frag_in i)
             {
-                #define MAX_NUM_STEPS 1024
+                #define MAX_NUM_STEPS 512
                 const int samplingRate = (int)(MAX_NUM_STEPS * _SamplingRateMultiplier);
 
                 RayInfo ray = getRayFront2Back(i.vertexLocal);

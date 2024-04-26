@@ -38,7 +38,7 @@ public class Duplicator : MonoBehaviour
         //newZPlane.GetComponent<BoxCollider>().enabled = false;
         newZPlane.transform.position = ZPos.transform.position;
         newZPlane.transform.rotation = ZPos.transform.rotation;
-     
+        
         if (manager.GetComponent<GlobalManager>().ZCopy == null)
         {
             manager.GetComponent<GlobalManager>().ZCopy = newZPlane;
@@ -59,7 +59,7 @@ public class Duplicator : MonoBehaviour
         RemoveAllComponentsExceptTransformAndMesh(newYPlane);
         newYPlane.transform.position = YPos.transform.position;
         newYPlane.transform.rotation = YPos.transform.rotation;
-    
+        
         if (manager.GetComponent<GlobalManager>().YCopy == null)
         {
             manager.GetComponent<GlobalManager>().YCopy = newYPlane;
