@@ -9,6 +9,7 @@ TagManager:
   - YPlane
   - XPlane
   - ZPlane
+  - Snapshots
   layers:
   - Default
   - TransparentFX
