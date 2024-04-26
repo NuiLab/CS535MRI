@@ -24,4 +24,10 @@ public class GlobalManager : MonoBehaviour
     {
         
     }
+    public void flush()
+    {
+        Destroy(ZCopy);
+        Destroy(YCopy);
+        Destroy(XCopy);
+    }
 }
