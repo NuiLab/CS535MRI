@@ -78,6 +78,12 @@ def evaluate(model, data_path, ann_path):
     all_recall = []
     all_acc = []
 
+    all_0 = []
+    all_1 = []
+    all_2 = []
+    all_3 = []
+    all_seg = []
+
     for i in range(len(in_imgs)):
         img_in = imp.open_img(in_imgs[i])
         out = imp.convert_output(_make_prediction(model, np.asarray(img_in).reshape(240,240,1)))
@@ -87,6 +93,21 @@ def evaluate(model, data_path, ann_path):
         fp = 0 # False positives
         fn = 0 # False negative
         err = 0
+
+        bg_TP = 0
+        bg_FN = 0
+
+        seg_TP = 0
+        seg_FN = 0
+
+        med1_TP = 0
+        med1_FN = 0
+
+        med2_TP = 0
+        med2_FN = 0
+
+        med3_TP = 0
+        med3_FN = 0
 
         empty_img = True
         n_none_empty = 0
@@ -100,6 +121,11 @@ def evaluate(model, data_path, ann_path):
                     empty_img = False
                     n_none_empty += 1
 
+                if true_pix > 0 and out_pix > 0:
+                    seg_TP += 1
+                if true_pix == 0 and out_pix > 0:
+                    seg_FN += 1
+
                 if out_pix == true_pix and true_pix != 0:
                     tp += 1
                 elif out_pix > 0 and true_pix == 0:
@@ -109,6 +135,24 @@ def evaluate(model, data_path, ann_path):
 
                 if out_pix != true_pix:
                     err += 1
+                    if out_pix == 0:
+                        bg_FN += 1
+                    if out_pix == 63:
+                        med1_FN += 1
+                    if out_pix == 127:
+                        med2_FN += 1
+                    if out_pix == 255:
+                        med3_FN += 1
+
+                if out_pix == true_pix:
+                    if out_pix == 0:
+                        bg_TP += 1
+                    if out_pix == 63:
+                        med1_TP += 1
+                    if out_pix == 127:
+                        med2_TP += 1
+                    if out_pix == 255:
+                        med3_TP += 1
 
         if not empty_img:
             if (tp + fp) == 0:
@@ -126,18 +170,53 @@ def evaluate(model, data_path, ann_path):
 
             print(f'Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}')
 
+            class_0_recall = 'na'
+            class_1_recall = 'na'
+            class_2_recall = 'na'
+            class_3_recall = 'na'
+            seg_recall = 'na'
+
+            if bg_TP + bg_FN != 0:
+                class_0_recall = float(bg_TP) / float(bg_TP + bg_FN)
+                all_0.append(class_0_recall)
+            if med1_TP + med1_FN != 0:
+                class_1_recall = float(med1_TP) / float(med1_TP + med1_FN)
+                all_1.append(class_1_recall)
+            if med2_TP + med2_FN != 0:
+                class_2_recall = float(med2_TP) / float(med2_TP + med2_FN)
+                all_2.append(class_2_recall)
+            if med3_TP + med2_FN != 0:
+                class_3_recall = float(med3_TP) / float(med3_TP + med2_FN)
+                all_3.append(class_3_recall)
+            if seg_TP + seg_FN != 0:
+                seg_recall = float(seg_TP) / float(seg_TP + seg_FN)
+                all_seg.append(seg_recall)
+
+
+            print(f'Recall: 0:{class_0_recall} 1:{class_1_recall} 2:{class_2_recall} 3:{class_3_recall} Seg:{seg_recall}')
+
     mean_p = calc_mean(all_pres)
     mean_r = calc_mean(all_recall)
     mean_a = calc_mean(all_acc)
 
-    return f'MEANS: Precision: {mean_p}, Recall: {mean_r}, Accuracy: {mean_a}'
+    mean_0 = calc_mean(all_0)
+    mean_1 = calc_mean(all_1)
+    mean_2 = calc_mean(all_2)
+    mean_3 = calc_mean(all_3)
+    mean_seg = calc_mean(all_seg)
+
+    return f'MEANS: Precision: {mean_p}, Recall: {mean_r}, Accuracy: {mean_a} | Perclass Recall: 0:{mean_0} 1:{mean_1} 2:{mean_2} 3:{mean_3} Seg:{mean_seg}'
 
 
 def calc_mean(numeric_list):
-    total = 0.0
-    for val in numeric_list:
-        total += val
-    return total / len(numeric_list)
+    if(len(numeric_list)) != 0:
+        total = 0.0
+        for val in numeric_list:
+            total += val
+        return total / len(numeric_list)
+    else:
+        return None
+    
 
 def use(model, scan_in, save_path, f_name):
     if scan_in[-4:] == '.png':
