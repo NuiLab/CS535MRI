@@ -22,7 +22,7 @@ opt = keras.optimizers.Adadelta(1.0 * hvd.size())
 opt = hvd.DistributedOptimizer(opt)
 
 print("> Building model")
-model = km.custom_model()
+model = km.prebuilt_model("vgg")
 
 print("> Setting callbacks")
 callbacks = [hvd.callbacks.BroadcastGlobalVariablesCallback(0),]
@@ -32,6 +32,6 @@ logger = CSVLogger('CONFIGURE OUTPUT PATH HERE', append=True, separator=',')
 callbacks.append(logger)
 
 print("> Training...")
-km.train(model, "CONFIGURE DATA PATH HERE", "CONFIGURE SEG PATH HERE", "CONFIGURE SAVE PATH HERE", callbacks=callbacks)
-
+#km.train(model, "CONFIGURE DATA PATH HERE", "CONFIGURE SEG PATH HERE", "CONFIGURE SAVE PATH HERE", callbacks=callbacks)
+km.load_model_weights(model, "CONFIGURE WEIGHTS TO LOAD HERE")
 km.use(model, "CONFIGURE DATA PATH HERE", "CONFIGURE SAVE PATH HERE", "SET OUTPUT NAME HERE")
